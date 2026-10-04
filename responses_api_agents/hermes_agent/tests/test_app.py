@@ -133,6 +133,7 @@ class TestSanity:
         provider = AsyncMock()
         sandbox = AsyncMock()
         sandbox.exec.return_value = MagicMock(return_code=0, stdout="", stderr="")
+        monkeypatch.setattr(HermesAgent, "resolve_model_base_url", lambda *args: "http://model:8000/v1")
         connect = AsyncMock(return_value=sandbox)
         monkeypatch.setattr("responses_api_agents.hermes_agent.app.shutil.which", lambda name: "/test/uv")
         monkeypatch.setattr("responses_api_agents.hermes_agent.app.get_global_config_dict", lambda: {"runtime": {}})
@@ -185,6 +186,7 @@ class TestSanity:
                 return MagicMock(return_code=next(import_results), stdout="", stderr="")
             return MagicMock(return_code=0, stdout="", stderr="")
 
+        monkeypatch.setattr(HermesAgent, "resolve_model_base_url", lambda *args: "http://model:8000/v1")
         sandbox.exec.side_effect = exec_
         monkeypatch.setattr("responses_api_agents.hermes_agent.app.get_global_config_dict", lambda: {"runtime": {}})
         monkeypatch.setattr("responses_api_agents.hermes_agent.app.resolve_provider_config", MagicMock())
@@ -227,6 +229,7 @@ class TestSanity:
         provider = AsyncMock()
         sandbox = AsyncMock()
         sandbox.exec.return_value = MagicMock(return_code=0, stdout="", stderr="")
+        monkeypatch.setattr(HermesAgent, "resolve_model_base_url", lambda *args: "http://model:8000/v1")
         sandbox_factory = MagicMock(return_value=sandbox)
         monkeypatch.setattr("responses_api_agents.hermes_agent.app.get_global_config_dict", lambda: {"runtime": {}})
         monkeypatch.setattr(
