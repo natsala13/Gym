@@ -238,3 +238,17 @@ MOUNTS=/shared/fs:/shared/fs \
 bash benchmarks/nemotron_3.5_super/sbatch_eval_with_external_vllm.sh \
 --config benchmarks/my-benchmark/config.yaml
 ```
+
+## Cached continuation compatibility branch
+
+This branch backports the continuation contract from NVIDIA-NeMo/Gym PR #4037
+to `b99bb98a0dd0644c350107be6e2453cd04025235`, retaining the release runtime
+and dependency set. The main-targeted PR remains separate.
+
+Set `GYM_MAX_AUTO_CONTINUATIONS` to a positive allocation-restart budget and
+provide a fixed `ROLLOUTS_FPATH` ending in `.jsonl`. The launcher owns
+`resume_from_cache`, requests a pre-walltime signal, and requeues the same job.
+`GYM_MAX_AUTO_RETRY_FAILURE_PERCENT` defaults to 10; broad failures, lack of
+progress, invalid coverage and exhausted budgets fail explicitly. The adjacent
+capability file advertises version 1. This is completion checking, not accuracy
+qualification; every evaluation needs its own output path.
